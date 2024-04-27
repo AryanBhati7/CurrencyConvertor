@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { InputBox } from "./components";
-import { useCurrencyInfo } from "./hooks";
-import "./App.css";
+import useCurrencyInfo from "./hooks/useCurrencyInfo";
 
 function App() {
   const [amount, setAmount] = useState(0);
+  const [convertedAmount, setConvertedAmount] = useState(0);
   const [from, setFrom] = useState("usd");
   const [to, setTo] = useState("inr");
-  const [convertedAmount, setConvertedAmount] = useState(0);
 
   const currencyInfo = useCurrencyInfo(from);
 
@@ -39,24 +38,44 @@ function App() {
             }}
           >
             <div className="w-full mb-1">
-              <InputBox label="From" />
+              <InputBox
+                label="From"
+                amount={amount}
+                currencyOptions={options}
+                onCurrencyChange={(currency) => setFrom(currency)}
+                selectCurrency={from}
+                onAmountChange={(amount) => {
+                  setAmount(amount);
+                }}
+              />
             </div>
             <div className="relative w-full h-0.5">
               <button
                 type="button"
                 className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-md bg-blue-600 text-white px-2 py-0.5"
+                onClick={swap}
               >
                 swap
               </button>
             </div>
             <div className="w-full mt-1 mb-4">
-              <InputBox label="To" />
+              <InputBox
+                label="To"
+                amount={convertedAmount}
+                currencyOptions={options}
+                onCurrencyChange={(currency) => {
+                  setTo(currency);
+                }}
+                selectCurrency={to}
+                amountDisable={true} //not allowing to  change second input
+              />
             </div>
             <button
               type="submit"
               className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg"
+              onClick={convert}
             >
-              Convert
+              Convert {from.toUpperCase()} to {to.toUpperCase()}
             </button>
           </form>
         </div>
