@@ -24,6 +24,7 @@ function InputBox({
           placeholder="Amount"
           disabled={amountDisable}
           value={amount}
+          min={0}
           onChange={(e) => {
             onAmountChange && onAmountChange(Number(e.target.value));
           }}
